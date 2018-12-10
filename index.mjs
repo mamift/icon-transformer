@@ -28,7 +28,6 @@ fs.readdir(config.input, (e, fileNames) => {
       );
       return;
     }
-    console.log(path.resolve(`${config.input}/${fileName}`));
     // READ EACH FILE
     fs.readFile(
       path.resolve(`${config.input}/${fileName}`),
@@ -37,7 +36,7 @@ fs.readdir(config.input, (e, fileNames) => {
         const $ = cheerio.load(icon);
 
         // BAKE TRANSFORMS
-        const out = await bakeTransforms($).then(
+        let out = await bakeTransforms($).then(
           // CLASSIFY FILLS
           $ => classifySVGFills($, config).then($ => $("body").html())
         );
@@ -50,6 +49,8 @@ fs.readdir(config.input, (e, fileNames) => {
         $("svg").replaceWith(optimised);
 
         $("svg").addClass("icon");
+
+        out = $("body").html();
 
         // REMOVE UNWANTED PREFIXES
         let outName = fileName;
