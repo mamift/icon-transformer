@@ -36,11 +36,6 @@ fs.readdir(config.input, (e, fileNames) => {
       async (err, icon) => {
         const $ = cheerio.load(icon);
 
-        // SVGO
-        const optimised = await svgo
-          .optimize($("body").html())
-          .then(({ data }) => data);
-
         $("svg").replaceWith(optimised);
 
         // BAKE TRANSFORMS
@@ -48,6 +43,13 @@ fs.readdir(config.input, (e, fileNames) => {
           // CLASSIFY FILLS
           $ => classifySVGFills($, config).then($ => $("body").html())
         );
+
+        // SVGO
+        const optimised = await svgo
+          .optimize($("body").html())
+          .then(({ data }) => data);
+
+        $("svg").addClass("icon");
 
         // REMOVE UNWANTED PREFIXES
         let outName = fileName;
