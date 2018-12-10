@@ -13,13 +13,11 @@ console.time("Transform icons");
 
 const args = process.argv.slice(2);
 
-const config = JSON.parse(
-  fs.readFileSync(path.resolve(process.cwd(), args[0]), "utf8")
-);
+const config = JSON.parse(fs.readFileSync(path.resolve(args[0]), "utf8"));
 
 const svgo = new SVGO(config.svgo);
 
-console.log(config);
+fs.mkdirSync(path.resolve(config.output), { recursive: true });
 
 // FIND ALL IN INPUT DIRECTORY
 fs.readdir(config.input, (e, fileNames) => {
@@ -30,38 +28,43 @@ fs.readdir(config.input, (e, fileNames) => {
       );
       return;
     }
+    console.log(path.resolve(`${config.input}/${fileName}`));
     // READ EACH FILE
-    fs.readFile(`./${config.input}/${fileName}`, "utf8", async (err, icon) => {
-      const $ = cheerio.load(icon);
+    fs.readFile(
+      path.resolve(`${config.input}/${fileName}`),
+      "utf8",
+      async (err, icon) => {
+        const $ = cheerio.load(icon);
 
-      // SVGO
-      const optimised = await svgo
-        .optimize($("body").html())
-        .then(({ data }) => data);
+        // SVGO
+        const optimised = await svgo
+          .optimize($("body").html())
+          .then(({ data }) => data);
 
-      $("svg").replaceWith(optimised);
+        $("svg").replaceWith(optimised);
 
-      // BAKE TRANSFORMS
-      const out = await bakeTransforms($).then(
-        // CLASSIFY FILLS
-        $ => classifySVGFills($, config).then($ => $("body").html())
-      );
+        // BAKE TRANSFORMS
+        const out = await bakeTransforms($).then(
+          // CLASSIFY FILLS
+          $ => classifySVGFills($, config).then($ => $("body").html())
+        );
 
-      // REMOVE UNWANTED PREFIXES
-      let outName = fileName;
-      config.cleanPrefixes.forEach(prefix => {
-        const re = new RegExp(`^${prefix}`);
-        outName = outName.replace(re, "");
-      });
+        // REMOVE UNWANTED PREFIXES
+        let outName = fileName;
+        config.cleanPrefixes.forEach(prefix => {
+          const re = new RegExp(`^${prefix}`);
+          outName = outName.replace(re, "");
+        });
 
-      // WRITE TO FILE
-      fs.writeFile(`./${config.output}/${outName}`, out, e => {
-        if (e) {
-          console.log(e);
-        }
-        console.log(`Saved ${outName}`);
-      });
-    });
+        // WRITE TO FILE
+        fs.writeFile(path.resolve(`${config.output}/${outName}`), out, e => {
+          if (e) {
+            console.log(e);
+          }
+          console.log(`Saved ${outName}`);
+        });
+      }
+    );
   });
 });
 // console.timeEnd("Transform icons");

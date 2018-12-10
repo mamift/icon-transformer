@@ -4,6 +4,7 @@ Clean up SVGs with one command. No compiling required, only pure Node.
 
 ## USAGE
 
+- _THIS TOOL REQUIRES NODE 10.12+, PLEASE UPDATE YOUR VERSION_
 - Install dependencies: `npm i`
 - Config can be passed in as a command line argument, `icon-config.json` shows a basic layout for this
   - All `.svg` files in `config.input` directory will be transformed

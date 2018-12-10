@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Clean and prepare SVG icons for use",
   "main": "index.js",
+  "engines": {
+    "node": ">=10.12.0"
+  },
   "scripts": {
     "start": "node --experimental-modules ./index.mjs icon-config.json"
   },
