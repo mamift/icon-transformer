@@ -1,23 +1,67 @@
-import bakeTransforms from "./functions/bakeTransforms";
+import fs from "fs";
+import path from "path";
 
+import cheerio from "cheerio";
+import SVGO from "svgo";
+
+// import config from "./icon-config";
+
+import bakeTransforms from "./functions/bakeTransforms";
 import classifySVGFills from "./functions/classifySVGFills";
 
-import fs from "fs";
+console.time("Transform icons");
 
+const args = process.argv.slice(2);
 
-import config from './.env';
+const config = JSON.parse(
+  fs.readFileSync(path.resolve(process.cwd(), args[0]), "utf8")
+);
 
-import cheerio from 'cheerio';
+const svgo = new SVGO(config.svgo);
 
+console.log(config);
 
-fs.readFile('./user.svg', "utf8", (err, icon) => {
-  const $ = cheerio.load(icon, {
-    xmlMode: true
+// FIND ALL IN INPUT DIRECTORY
+fs.readdir(config.input, (e, fileNames) => {
+  fileNames.forEach(async fileName => {
+    if (!fileName.match(/\.svg$/)) {
+      console.log(
+        `${fileName} was not processed, please supply only .svg files`
+      );
+      return;
+    }
+    // READ EACH FILE
+    fs.readFile(`./${config.input}/${fileName}`, "utf8", async (err, icon) => {
+      const $ = cheerio.load(icon);
+
+      // SVGO
+      const optimised = await svgo
+        .optimize($("body").html())
+        .then(({ data }) => data);
+
+      $("svg").replaceWith(optimised);
+
+      // BAKE TRANSFORMS
+      const out = await bakeTransforms($).then(
+        // CLASSIFY FILLS
+        $ => classifySVGFills($, config).then($ => $("body").html())
+      );
+
+      // REMOVE UNWANTED PREFIXES
+      let outName = fileName;
+      config.cleanPrefixes.forEach(prefix => {
+        const re = new RegExp(`^${prefix}`);
+        outName = outName.replace(re, "");
+      });
+
+      // WRITE TO FILE
+      fs.writeFile(`./${config.output}/${outName}`, out, e => {
+        if (e) {
+          console.log(e);
+        }
+        console.log(`Saved ${outName}`);
+      });
+    });
   });
-  bakeTransforms($)
-    .then(
-      $ => classifySVGFills($)
-        .then($ => console.log($('svg').html()))
-    );
-  // console.log(out);
-})
+});
+// console.timeEnd("Transform icons");

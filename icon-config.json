@@ -1,0 +1,31 @@
+{
+  "input": "./input",
+  "output": "./output",
+  "fills": [
+    {
+      "class": "icon-primary",
+      "fills": ["#4A4A4A", "rgb(74,74,74)"]
+    },
+    {
+      "class": "icon-secondary",
+      "fills": ["#FF9859", "rgb(255,152,89)"]
+    },
+    {
+      "class": "icon-empty",
+      "fills": ["none"]
+    }
+  ],
+  "svgo": {
+    "plugins": [
+      {
+        "removeAttrs": {
+          "attrs": "stroke"
+        }
+      },
+      { "removeViewBox": false },
+      { "removeStyleElement": true },
+      { "removeScriptElement": true }
+    ]
+  },
+  "cleanPrefixes": ["icons_", "example-"]
+}
