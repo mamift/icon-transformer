@@ -2,20 +2,20 @@ import svgpath from "svgpath";
 
 // Remove transforms from groups and assign to child elements
 export default async function bakeSVGTransforms($) {
-  let $svg = $("svg");
-  var groups = $svg.find("g");
+  const $svg = $("svg");
+  const groups = $svg.find("g");
   $(groups).each((i, group) => {
-    var transform = group.attribs.transform;
+    const { transform } = group.attribs;
 
     if (transform !== undefined) {
-      for (var c = 0; c < group.children.length; c++) {
-        var childAttributes = group.children[c].attribs;
+      for (let c = 0; c < group.children.length; c += 1) {
+        const childAttributes = group.children[c].attribs;
 
         if (childAttributes !== undefined) {
-          var childTransform = childAttributes.transform;
+          let childTransform = childAttributes.transform;
 
           if (childTransform !== undefined) {
-            childTransform += " " + transform;
+            childTransform += ` ${transform}`;
           } else {
             childTransform = transform;
           }
@@ -29,9 +29,9 @@ export default async function bakeSVGTransforms($) {
       }
     }
     // Bake transforms into paths
-    $svg.find("path").each(function() {
+    $svg.find("path").each(function bakeTransformOnPath() {
       if ($(this).attr("transform") != undefined) {
-        var newPath = svgpath($(this).attr("d"))
+        const newPath = svgpath($(this).attr("d"))
           .transform($(this).attr("transform"))
           .round(10)
           .toString();
@@ -39,35 +39,28 @@ export default async function bakeSVGTransforms($) {
         $(this).removeAttr("transform");
       }
     });
-    $svg.find("[points][transform]").each(function() {
-      var translates = $(this)
+    $svg.find("[points][transform]").each(function bakeTransformOnPoints() {
+      let translates = $(this)
         .attr("transform")
-        .match(/(?<=translate\()([\d\.-]+, *[\d\.-]+)(?=\))/g);
-      translates = translates.map(translate =>
-        translate.split(",").map(coord => coord.trim())
-      );
+        .match(/(?<=translate\()([\d.-]+, *[\d.-]+)(?=\))/g);
+      translates = translates.map(translate => translate.split(",").map(coord => coord.trim()));
 
-      var translateX = translates.reduce(
+      const translateX = translates.reduce(
         (value, translate) => parseFloat(value) + parseFloat(translate[0]),
-        0
+        0,
       );
-      var translateY = translates.reduce(
+      const translateY = translates.reduce(
         (value, translate) => parseFloat(value) + parseFloat(translate[1]),
-        0
+        0,
       );
 
-      var pointGroups = $(this)
+      const pointGroups = $(this)
         .attr("points")
-        .match(/([\d\.]+[ ,]+[\d\.]+)/g);
+        .match(/([\d.]+[ ,]+[\d.]+)/g);
 
-      var points = pointGroups.map(group => {
-        var coords = group.split(" ");
-        return (
-          parseFloat(coords[0]) +
-          translateX +
-          " " +
-          (parseFloat(coords[1]) + translateY)
-        );
+      const points = pointGroups.map((pointGroup) => {
+        const coords = pointGroup.split(" ");
+        return `${parseFloat(coords[0]) + translateX} ${parseFloat(coords[1]) + translateY}`;
       });
 
       $(this).attr("points", points.join(", "));

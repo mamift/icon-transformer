@@ -31,39 +31,29 @@ fs.readdir(config.input, (e, fileNames) => {
           const $ = cheerio.load(icon);
 
           // BAKE TRANSFORMS
-          let out = await bakeTransforms($).then(
-            // CLASSIFY FILLS
-            $ => classifySVGFills($, config).then($ => $("body").html()),
-          );
+          await bakeTransforms($);
+          // CLEAN FILLS
+          await classifySVGFills($, config);
 
           // SVGO
           const optimised = await svgo.optimize($("body").html()).then(({ data }) => data);
-
           $("svg").replaceWith(optimised);
-
           $("svg").addClass("icon");
+          const out = $("body").html();
 
-          out = $("body").html();
-
-          // REMOVE UNWANTED PREFIXES
+          // REMOVE FILE PREFIXES
           let outName = fileName;
           config.cleanPrefixes.forEach((prefix) => {
-            const re = new RegExp(`^${prefix}`);
-            outName = outName.replace(re, "");
+            outName = outName.replace(new RegExp(`^${prefix}`), "");
           });
 
           // WRITE TO FILE
-          fs.writeFile(path.resolve(`${config.output}/${outName}`), out, (e) => {
-            if (e) {
-              console.log(e);
-            }
-            return resolve(`Saved ${outName}`);
-          });
+          fs.writeFile(path.resolve(`${config.output}/${outName}`), out, () => resolve(`Saved ${outName}`));
         });
       }),
     ),
   ).then(() => {
-    console.log(`${fileNames.length} icons processed`);
+    console.log(`${fileNames.length} files processed`);
     console.timeEnd("Icon processing complete");
   });
 });
