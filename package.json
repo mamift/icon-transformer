@@ -2,7 +2,7 @@
   "name": "icon-transformer",
   "version": "1.0.0",
   "description": "Clean and prepare SVG icons for use",
-  "main": "index.js",
+  "main": "index.mjs",
   "engines": {
     "node": ">=10.12.0"
   },
