@@ -23,35 +23,48 @@ fs.mkdirSync(path.resolve(config.output), { recursive: true });
 fs.readdir(config.input, (e, fileNames) => {
   Promise.all(
     fileNames.map(
-      async fileName => new Promise((resolve) => {
-        if (!fileName.match(/\.svg$/)) {
-          return resolve(`${fileName} was not processed, please supply only .svg files`);
-        }
-        fs.readFile(path.resolve(`${config.input}/${fileName}`), "utf8", async (err, icon) => {
-          const $ = cheerio.load(icon);
+      async fileName =>
+        new Promise(resolve => {
+          if (!fileName.match(/\.svg$/)) {
+            return resolve(
+              `${fileName} was not processed, please supply only .svg files`
+            );
+          }
+          fs.readFile(
+            path.resolve(`${config.input}/${fileName}`),
+            "utf8",
+            async (err, icon) => {
+              const $ = cheerio.load(icon);
 
-          // BAKE TRANSFORMS
-          await bakeTransforms($);
-          // CLEAN FILLS
-          await classifySVGFills($, config);
+              // BAKE TRANSFORMS
+              await bakeTransforms($);
+              // CLEAN FILLS
+              await classifySVGFills($, config);
 
-          // SVGO
-          const optimised = await svgo.optimize($("body").html()).then(({ data }) => data);
-          $("svg").replaceWith(optimised);
-          $("svg").addClass("icon");
-          const out = $("body").html();
+              // SVGO
+              const optimised = await svgo
+                .optimize($("body").html())
+                .then(({ data }) => data);
+              $("svg").replaceWith(optimised);
+              $("svg").addClass("icon");
+              const out = $("body").html();
 
-          // REMOVE FILE PREFIXES
-          let outName = fileName;
-          config.cleanPrefixes.forEach((prefix) => {
-            outName = outName.replace(new RegExp(`^${prefix}`), "");
-          });
+              // REMOVE FILE PREFIXES
+              let outName = fileName.toLowerCase();
+              config.cleanPrefixes.forEach(prefix => {
+                outName = outName.replace(new RegExp(`^${prefix}`), "");
+              });
 
-          // WRITE TO FILE
-          fs.writeFile(path.resolve(`${config.output}/${outName}`), out, () => resolve(`Saved ${outName}`));
-        });
-      }),
-    ),
+              // WRITE TO FILE
+              fs.writeFile(
+                path.resolve(`${config.output}/${outName}`),
+                out,
+                () => resolve(`Saved ${outName}`)
+              );
+            }
+          );
+        })
+    )
   ).then(() => {
     console.log(`${fileNames.length} files processed`);
     console.timeEnd("Icon processing complete");

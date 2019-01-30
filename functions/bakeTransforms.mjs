@@ -1,9 +1,35 @@
 import svgpath from "svgpath";
 
+function fetchTransforms(el) {
+  const translateMatch = new RegExp(
+    /(?<=translate\()([\d.-]+,? *[\d.-]+)(?=\))/g
+  );
+
+  let translates = el.attr("transform").match(translateMatch);
+
+  translates = translates.map(translate =>
+    translate.includes(",")
+      ? translate.split(",").map(coord => coord.trim())
+      : translate.split(" ").map(coord => coord.trim())
+  );
+
+  const translateX = translates.reduce(
+    (value, translate) => parseFloat(value) + parseFloat(translate[0]),
+    0
+  );
+  const translateY = translates.reduce(
+    (value, translate) => parseFloat(value) + parseFloat(translate[1]),
+    0
+  );
+
+  return { translateX, translateY };
+}
+
 // Remove transforms from groups and assign to child elements
 export default async function bakeSVGTransforms($) {
   const $svg = $("svg");
   const groups = $svg.find("g");
+
   $(groups).each((i, group) => {
     const { transform } = group.attribs;
 
@@ -40,30 +66,28 @@ export default async function bakeSVGTransforms($) {
       }
     });
     $svg.find("[points][transform]").each(function bakeTransformOnPoints() {
-      let translates = $(this)
-        .attr("transform")
-        .match(/(?<=translate\()([\d.-]+, *[\d.-]+)(?=\))/g);
-      translates = translates.map(translate => translate.split(",").map(coord => coord.trim()));
-
-      const translateX = translates.reduce(
-        (value, translate) => parseFloat(value) + parseFloat(translate[0]),
-        0,
-      );
-      const translateY = translates.reduce(
-        (value, translate) => parseFloat(value) + parseFloat(translate[1]),
-        0,
-      );
+      const { translateX, translateY } = fetchTransforms($(this));
 
       const pointGroups = $(this)
         .attr("points")
         .match(/([\d.]+[ ,]+[\d.]+)/g);
 
-      const points = pointGroups.map((pointGroup) => {
+      const points = pointGroups.map(pointGroup => {
         const coords = pointGroup.split(" ");
-        return `${parseFloat(coords[0]) + translateX} ${parseFloat(coords[1]) + translateY}`;
+        return `${parseFloat(coords[0]) + translateX} ${parseFloat(coords[1]) +
+          translateY}`;
       });
 
       $(this).attr("points", points.join(", "));
+
+      $(this).removeAttr("transform");
+    });
+
+    $svg.find("circle[transform]").each(function bakeTransformOnCircle() {
+      const { translateX, translateY } = fetchTransforms($(this));
+
+      $(this).attr("cx", parseFloat($(this).attr("cx")) + translateX);
+      $(this).attr("cy", parseFloat($(this).attr("cy")) + translateY);
 
       $(this).removeAttr("transform");
     });
