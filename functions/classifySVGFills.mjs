@@ -13,7 +13,7 @@ export default async function classifySVGFills($, config) {
     $(this).removeAttr("clip-path");
   });
 
-  config.fills.forEach((fillDefinition) => {
+  config.fills.forEach(fillDefinition => {
     const fillSelectors = fillDefinition.fills.map(fill => `[fill="${fill}"]`);
 
     $svg.find(fillSelectors.join(", ")).each(function addIconFill() {

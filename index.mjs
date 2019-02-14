@@ -7,6 +7,7 @@ import SVGO from "svgo";
 
 import bakeTransforms from "./functions/bakeTransforms";
 import classifySVGFills from "./functions/classifySVGFills";
+import flattenXlinks from "./functions/flattenXlinks";
 
 console.time("Icon processing complete");
 
@@ -36,6 +37,7 @@ fs.readdir(config.input, (e, fileNames) => {
             async (err, icon) => {
               const $ = cheerio.load(icon);
 
+              await flattenXlinks($);
               // BAKE TRANSFORMS
               await bakeTransforms($);
               // CLEAN FILLS
