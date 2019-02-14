@@ -37,6 +37,7 @@ fs.readdir(config.input, (e, fileNames) => {
             async (err, icon) => {
               const $ = cheerio.load(icon);
 
+              // TURN USE[XLINK:HREF] INTO REAL ELEMENTS
               await flattenXlinks($);
               // BAKE TRANSFORMS
               await bakeTransforms($);
