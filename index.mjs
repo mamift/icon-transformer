@@ -6,7 +6,7 @@ import cheerio from "cheerio";
 import SVGO from "svgo";
 
 import bakeTransforms from "./functions/bakeTransforms";
-import classifySVGFills from "./functions/classifySVGFills";
+import classifySVGAttrs from "./functions/classifySVGAttrs";
 import flattenXlinks from "./functions/flattenXlinks";
 
 console.time("Icon processing complete");
@@ -41,8 +41,8 @@ fs.readdir(config.input, (e, fileNames) => {
               await flattenXlinks($);
               // BAKE TRANSFORMS
               await bakeTransforms($);
-              // CLEAN FILLS
-              await classifySVGFills($, config);
+              // CLEAN SPECIFIED ATTRIBUTES
+              await classifySVGAttrs($, config);
 
               // SVGO
               const optimised = await svgo
