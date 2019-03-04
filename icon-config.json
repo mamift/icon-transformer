@@ -7,15 +7,15 @@
       "maps": [
         {
           "class": "icon-primary",
-          "fills": ["#4A4A4A", "rgb(74,74,74)"]
+          "values": ["#4A4A4A", "rgb(74,74,74)"]
         },
         {
           "class": "icon-secondary",
-          "fills": ["#FF9859", "rgb(255,152,89)"]
+          "values": ["#FF9859", "rgb(255,152,89)"]
         },
         {
           "class": "icon-empty",
-          "fills": ["none"]
+          "values": ["none"]
         }
       ]
     }
