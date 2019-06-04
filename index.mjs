@@ -24,50 +24,41 @@ fs.mkdirSync(path.resolve(config.output), { recursive: true });
 fs.readdir(config.input, (e, fileNames) => {
   Promise.all(
     fileNames.map(
-      async fileName =>
-        new Promise(resolve => {
-          if (!fileName.match(/\.svg$/)) {
-            return resolve(
-              `${fileName} was not processed, please supply only .svg files`
-            );
+      async fileName => new Promise((resolve) => {
+        if (!fileName.match(/\.svg$/)) {
+          return resolve(`${fileName} was not processed, please supply only .svg files`);
+        }
+        fs.readFile(path.resolve(`${config.input}/${fileName}`), "utf8", async (err, icon) => {
+          const $ = cheerio.load(icon);
+
+          // TURN USE[XLINK:HREF] INTO REAL ELEMENTS
+          await flattenXlinks($);
+          // BAKE TRANSFORMS
+          if (config.bakeTransforms === undefined || config.bakeTransforms === true) {
+            await bakeTransforms($);
           }
-          fs.readFile(
-            path.resolve(`${config.input}/${fileName}`),
-            "utf8",
-            async (err, icon) => {
-              const $ = cheerio.load(icon);
+          // CLEAN SPECIFIED ATTRIBUTES
+          await classifySVGAttrs($, config);
 
-              // TURN USE[XLINK:HREF] INTO REAL ELEMENTS
-              await flattenXlinks($);
-              // BAKE TRANSFORMS
-              await bakeTransforms($);
-              // CLEAN SPECIFIED ATTRIBUTES
-              await classifySVGAttrs($, config);
+          // SVGO
+          const optimised = await svgo.optimize($("body").html()).then(({ data }) => data);
 
-              // SVGO
-              const optimised = await svgo
-                .optimize($("body").html())
-                .then(({ data }) => data);
-              $("svg").replaceWith(optimised);
-              $("svg").addClass("icon");
-              const out = $("body").html();
+          $("svg").replaceWith(optimised);
+          $("svg").addClass("icon");
 
-              // REMOVE FILE PREFIXES
-              let outName = fileName.toLowerCase().replace(" ", "-");
-              config.cleanPrefixes.forEach(prefix => {
-                outName = outName.replace(new RegExp(`^${prefix}`), "");
-              });
+          const out = $("body").html();
 
-              // WRITE TO FILE
-              fs.writeFile(
-                path.resolve(`${config.output}/${outName}`),
-                out,
-                () => resolve(`Saved ${outName}`)
-              );
-            }
-          );
-        })
-    )
+          // REMOVE FILE PREFIXES
+          let outName = fileName.toLowerCase().replace(" ", "-");
+          config.cleanPrefixes.forEach((prefix) => {
+            outName = outName.replace(new RegExp(`^${prefix}`), "");
+          });
+
+          // WRITE TO FILE
+          fs.writeFile(path.resolve(`${config.output}/${outName}`), out, () => resolve(`Saved ${outName}`));
+        });
+      }),
+    ),
   ).then(() => {
     console.log(`${fileNames.length} files processed`);
     console.timeEnd("Icon processing complete");
