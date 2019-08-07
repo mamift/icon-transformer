@@ -25,7 +25,7 @@ export default async function classifySVGAttrs($, config) {
           $(this).addClass(map.class);
         });
       });
-      $(`[${keyedMap.key}]`).removeAttr(keyedMap.key);
+      $(`[${keyedMap.key || keyedMap.attribute}]`).removeAttr(keyedMap.key || keyedMap.attribute);
     });
   } else if (config.fills) {
     // Maintained for backwards compatibility
