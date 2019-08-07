@@ -17,7 +17,9 @@ export default async function classifySVGAttrs($, config) {
   if (config.classify) {
     config.classify.forEach((keyedMap) => {
       keyedMap.maps.forEach((map) => {
-        const selectors = map.values.map(value => `[${keyedMap.key}="${value}"]`);
+        const selectors = map.values.map(
+          value => `[${keyedMap.key || keyedMap.attribute}="${value}"]`,
+        );
 
         $svg.find(selectors.join(", ")).each(function addIconClass() {
           $(this).addClass(map.class);
