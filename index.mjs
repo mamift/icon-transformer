@@ -66,9 +66,10 @@ fs.readdir(config.input, (e, fileNames) => {
       }),
     ),
   ).then(() => {
-		if (numErrors > 0) {
-			console.log("\n");
-		}
+    if (numErrors > 0) {
+      // Just for an empty line
+      console.log();
+    }
     console.log(`${fileNames.length - numErrors} files processed`);
     console.timeEnd("Icon processing complete");
   });
