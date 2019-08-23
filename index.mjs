@@ -20,13 +20,15 @@ const svgo = new SVGO(config.svgo);
 // CREATE DIRECTORY FOR ICONS IF IT DOESN'T EXIST
 fs.mkdirSync(path.resolve(config.output), { recursive: true });
 
+let numErrors = 0;
+
 // FIND ALL IN INPUT DIRECTORY
 fs.readdir(config.input, (e, fileNames) => {
   Promise.all(
     fileNames.map(
-      async fileName => new Promise((resolve) => {
+      async fileName => new Promise((resolve, reject) => {
         if (!fileName.match(/\.svg$/)) {
-          return resolve(`${fileName} was not processed, please supply only .svg files`);
+          return reject(`${fileName} was not processed, please supply only .svg files`);
         }
         fs.readFile(path.resolve(`${config.input}/${fileName}`), "utf8", async (err, icon) => {
           const $ = cheerio.load(icon);
@@ -57,10 +59,17 @@ fs.readdir(config.input, (e, fileNames) => {
           // WRITE TO FILE
           fs.writeFile(path.resolve(`${config.output}/${outName}`), out, () => resolve(`Saved ${outName}`));
         });
+      })
+      .catch(error => {
+        console.warn("\x1b[33m%s\x1b[0m", `⚠️  Notice: ${error}`);
+        numErrors += 1;
       }),
     ),
   ).then(() => {
-    console.log(`${fileNames.length} files processed`);
+		if (numErrors > 0) {
+			console.log("\n");
+		}
+    console.log(`${fileNames.length - numErrors} files processed`);
     console.timeEnd("Icon processing complete");
   });
 });
