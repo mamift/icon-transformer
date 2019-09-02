@@ -53,7 +53,13 @@ fs.readdir(config.input, (e, fileNames) => {
               const out = $("body").html();
 
               // REMOVE FILE PREFIXES
-              let outName = fileName.toLowerCase().replace(" ", "-");
+              let outName = fileName
+                .toLowerCase()
+                .replace(" ", "-")
+                .replace(
+                  /\.svg$/,
+                  config.outputExtension ? config.outputExtension : ".svg"
+                );
               config.cleanPrefixes.forEach(prefix => {
                 outName = outName.replace(new RegExp(`^${prefix}`), "");
               });

@@ -32,5 +32,6 @@
       { "removeScriptElement": true }
     ]
   },
-  "cleanPrefixes": ["icons_", "example-"]
+  "cleanPrefixes": ["icons_", "example-"],
+  "outputExtension": ".svg"
 }
