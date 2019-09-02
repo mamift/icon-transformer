@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Clean and prepare SVG icons for use",
   "main": "index.mjs",
+  "bin": {
+    "icon-transformer": "./index.mjs"
+  },
   "engines": {
     "node": ">=10.12.0"
   },
