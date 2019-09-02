@@ -3,7 +3,7 @@
   "output": "./output",
   "classify": [
     {
-      "key": "fill",
+      "attribute": "fill",
       "maps": [
         {
           "class": "icon-primary",

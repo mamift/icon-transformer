@@ -15,32 +15,31 @@ export default async function classifySVGAttrs($, config) {
 
   // TODO: Better names for object keys
   if (config.classify) {
-    config.classify.forEach(keyedMap => {
-      keyedMap.maps.forEach(map => {
+    config.classify.forEach((keyedMap) => {
+      keyedMap.maps.forEach((map) => {
         const selectors = map.values.map(
-          value => `[${keyedMap.key}="${value}"]`
+          value => `[${keyedMap.key || keyedMap.attribute}="${value}"]`,
         );
 
         $svg.find(selectors.join(", ")).each(function addIconClass() {
           $(this).addClass(map.class);
         });
       });
-      $(`[${keyedMap.key}]`).removeAttr(keyedMap.key);
+      $(`[${keyedMap.key || keyedMap.attribute}]`).removeAttr(keyedMap.key || keyedMap.attribute);
     });
   } else if (config.fills) {
     // Maintained for backwards compatibility
-    config.fills.forEach(fillDefinition => {
-      const fillSelectors = fillDefinition.fills.map(
-        fill => `[fill="${fill}"]`
-      );
+    config.fills.forEach((fillDefinition) => {
+      const fillSelectors = fillDefinition.fills.map(fill => `[fill="${fill}"]`);
 
       $svg.find(fillSelectors.join(", ")).each(function addIconFill() {
         $(this).addClass(fillDefinition.class);
       });
     });
+
+    $("[fill]").removeAttr("fill");
   }
 
-  $("[fill]").removeAttr("fill");
   $("[style]").removeAttr("style");
 
   return $;
