@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-modules
+#!/usr/bin/env -S node --experimental-modules
 
 /* eslint-disable no-shadow, consistent-return */
 import fs from "fs";
