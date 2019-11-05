@@ -1,6 +1,6 @@
 {
   "name": "icon-transformer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Clean and prepare SVG icons for use",
   "main": "index.mjs",
   "bin": "./bin.js",
