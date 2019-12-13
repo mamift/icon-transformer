@@ -15,9 +15,9 @@
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/lambagency/icon-transformer.git"
   },
-  "author": "Sam Haakman (sam@lambagency.com.au)",
+  "author": "Sam Haakman (floatingdino@gmail.com)",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/lambagency/icon-transformer#readme",
+  "homepage": "https://github.com/floatingdino/Icon-Transformer",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "svgo": "^1.3.2",
