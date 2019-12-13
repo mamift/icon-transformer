@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/lambagency/icon-transformer.git"
+    "url": "https://github.com/floatingdino/Icon-Transformer.git"
   },
   "author": "Sam Haakman (floatingdino@gmail.com)",
   "license": "MIT",
