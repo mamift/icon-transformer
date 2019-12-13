@@ -6,12 +6,15 @@
       "attribute": "fill",
       "maps": [
         {
-          "class": "icon-primary",
-          "values": ["#4A4A4A", "rgb(74,74,74)"]
-        },
-        {
-          "class": "icon-secondary",
-          "values": ["#FF9859", "rgb(255,152,89)"]
+          "class": "icon-white",
+          "values": [
+            "#fff",
+            "#ffffff",
+            "#FFF",
+            "#FFFFFF",
+            "white",
+            "rgb(255,255,255)"
+          ]
         },
         {
           "class": "icon-empty",

@@ -9,14 +9,14 @@
   },
   "type": "module",
   "scripts": {
-    "start": "node --experimental-modules --no-warnings ./index.mjs icon-config.json"
+    "start": "node ./bin.js"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/lambagency/icon-transformer.git"
   },
   "author": "Sam Haakman (sam@lambagency.com.au)",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "homepage": "https://bitbucket.org/lambagency/icon-transformer#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",

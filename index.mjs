@@ -3,12 +3,14 @@ import fs from "fs";
 import path from "path";
 
 import processFolder from "./functions/processFolder";
+import defaultConfig from "./icon-config.json";
 
 console.time("Icon processing complete");
 
 const args = process.argv.slice(2);
 
-const config = JSON.parse(fs.readFileSync(path.resolve(args[0]), "utf8"));
+const config =
+  (args[0] && JSON.parse(fs.readFileSync(args[0], "utf8"))) || defaultConfig;
 
 // CREATE DIRECTORY FOR ICONS IF IT DOESN'T EXIST
 fs.mkdirSync(path.resolve(config.output), { recursive: true });

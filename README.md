@@ -1,11 +1,12 @@
-# ICON TRANSFORMER
+# Icon Transformer
 
 Clean up SVGs with one command. No compiling required, only pure Node.
 
-## USAGE
+## Usage
 
 - _THIS TOOL REQUIRES NODE 10.12+, PLEASE UPDATE YOUR VERSION_
-- Install dependencies: `npm i`
+- Can be used standalone or as a dependency of your project
+- Standalone: `npm start`; as a dependency: `node icon-transformer {path-to-icon-config.json}`
 - Config can be passed in as a command line argument, `icon-config.json` shows a basic layout for this
   - All `.svg` files in `config.input` directory will be transformed
   - After transformation, icons will be piped to `config.output` directory

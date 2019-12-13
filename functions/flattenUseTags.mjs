@@ -1,4 +1,4 @@
-export default function flattenXlinks($) {
+export default function flattenUseTags($) {
   const $svg = $("svg");
   const xlinks = $svg.find("use[href]");
   xlinks.each(function flattenEachXlink() {
