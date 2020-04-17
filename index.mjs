@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 
-import processFolder from "./functions/processFolder";
+import processFolder from "./functions/processFolder.mjs";
 
 async function iconTransformer(cfg) {
   console.time("Icon processing complete");

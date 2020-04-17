@@ -3,13 +3,17 @@
   "version": "1.3.0-0",
   "description": "Clean and prepare SVG icons for use",
   "main": "index.mjs",
-  "bin": "./bin.js",
+  "bin": {
+    "icon-transformer": "./bin.cjs",
+    "icon-transformer-esm": "./bin.mjs"
+  },
   "engines": {
     "node": ">=10.12.0"
   },
   "type": "module",
   "scripts": {
-    "start": "node ./bin.js"
+    "start": "node ./bin.cjs",
+    "start-esm": "node ./bin.mjs"
   },
   "repository": {
     "type": "git",

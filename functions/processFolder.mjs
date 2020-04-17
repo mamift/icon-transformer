@@ -4,9 +4,9 @@ import path from "path";
 import cheerio from "cheerio";
 import SVGO from "svgo";
 
-import bakeTransforms from "./bakeTransforms";
-import classifySVGAttrs from "./classifySVGAttrs";
-import flattenUseTags from "./flattenUseTags";
+import bakeTransforms from "./bakeTransforms.mjs";
+import classifySVGAttrs from "./classifySVGAttrs.mjs";
+import flattenUseTags from "./flattenUseTags.mjs";
 
 export default function processFolder(folder, config, outputSubfolder = null) {
   const svgo = new SVGO(config.svgo);
@@ -94,11 +94,15 @@ export default function processFolder(folder, config, outputSubfolder = null) {
                         }${outName}`
                       ),
                       out,
-                      () => resolve(`Saved ${outName}`)
-                    ).catch(e => {
-                      // FIXME: all of these FS operations should probably have a catch/reject
-                      console.warn(e);
-                    });
+                      e => {
+                        if (e) {
+                          console.warn(e);
+                          reject(e);
+                        } else {
+                          resolve(`Saved ${outName}`);
+                        }
+                      }
+                    );
                   }
                 );
               })
