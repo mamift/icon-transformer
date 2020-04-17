@@ -12,8 +12,8 @@
   },
   "type": "module",
   "scripts": {
-    "start": "node ./bin.cjs",
-    "start-esm": "node ./bin.mjs"
+    "start": "node ./bin.cjs icon-config.json",
+    "esm": "node ./bin.mjs icon-config.json"
   },
   "repository": {
     "type": "git",
