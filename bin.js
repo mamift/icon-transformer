@@ -4,7 +4,7 @@ const path = require("path");
 const { spawn } = require("child_process");
 
 const FLAGS = ["--experimental-modules", "--no-warnings"];
-const EXEC_FILE = path.join(__dirname, "index.mjs");
+const EXEC_FILE = path.join(__dirname, "cli.mjs");
 
 const options = [...FLAGS, EXEC_FILE, ...process.argv.slice(2)];
 const subprocess = spawn(process.argv0, options, {
