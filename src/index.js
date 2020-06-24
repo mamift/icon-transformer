@@ -4,14 +4,13 @@ import path from "path";
 
 import processFolder from "./functions/processFolder.mjs";
 
-async function iconTransformer(cfg) {
+export default async function(cfg) {
   console.time("Icon processing complete");
 
   // CREATE DIRECTORY FOR ICONS IF IT DOESN'T EXIST
   fs.mkdirSync(path.resolve(cfg.output), { recursive: true });
-
+  console.log(cfg.output, path.resolve(cfg.output));
   const promises = await processFolder(cfg.input, cfg);
-
   let numErrors = 0;
 
   await Promise.all(
@@ -33,5 +32,3 @@ async function iconTransformer(cfg) {
 
   return numErrors;
 }
-
-export default iconTransformer;

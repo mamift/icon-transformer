@@ -2,3 +2,4 @@ node_modules
 output/**
 input/**
 !input/example-user.svg
+dist

@@ -2,15 +2,15 @@ import fs from "fs";
 import path from "path";
 
 import cheerio from "cheerio";
-import SVGO from "svgo";
 
 import bakeTransforms from "./bakeTransforms.mjs";
 import classifySVGAttrs from "./classifySVGAttrs.mjs";
 import flattenUseTags from "./flattenUseTags.mjs";
 
+const SVGO = require("svgo");
+
 export default function processFolder(folder, config, outputSubfolder = null) {
   const svgo = new SVGO(config.svgo);
-
   if (outputSubfolder) {
     fs.mkdirSync(path.resolve(`${config.output}/${outputSubfolder}`), {
       recursive: true

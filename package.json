@@ -13,7 +13,8 @@
   "type": "module",
   "scripts": {
     "start": "node ./bin.cjs icon-config.json",
-    "esm": "node ./bin.mjs icon-config.json"
+    "esm": "node ./bin.mjs icon-config.json",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -31,5 +32,9 @@
     "eslint": "^6.7.2",
     "prettier": "^1.19.1",
     "prettier-eslint": "^8.8.2"
+  },
+  "devDependencies": {
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
