@@ -9,7 +9,7 @@ export default async function(cfg) {
 
   // CREATE DIRECTORY FOR ICONS IF IT DOESN'T EXIST
   fs.mkdirSync(path.resolve(cfg.output), { recursive: true });
-  console.log(cfg.output, path.resolve(cfg.output));
+
   const promises = await processFolder(cfg.input, cfg);
   let numErrors = 0;
 
