@@ -1,7 +1,4 @@
-module.exports = {	
-	node: {
-		fs: 'empty'
-	},
+module.exports = {
 	mode: "production",
 	target: "async-node",
 	output: {

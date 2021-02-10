@@ -15,7 +15,7 @@
     "start": "node ./bin.cjs icon-config.json",
     "esm": "node ./bin.mjs icon-config.json",
     "prepack": "npm run -s build",
-    "build": "webpack ./webpack.config.cjs"
+    "build": "webpack --config ./webpack.config.cjs"
   },
   "repository": {
     "type": "git",
