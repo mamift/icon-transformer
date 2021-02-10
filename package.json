@@ -1,7 +1,7 @@
 {
-  "name": "icon-transformer",
-  "version": "1.3.0",
-  "description": "Clean and prepare SVG icons for use",
+  "name": "svg-icon-transformer",
+  "version": "0.1.0",
+  "description": "Clean and prepare SVG icons for use; a fork of github.com/floatingdino/Icon-Transformer to fix some yarn and pre-v7 npm issues. Tested with node.js v12.18.4 and node.js v13.14.0, yarn 1.22 and npm 6,7.",
   "main": "dist/main.js",
   "bin": {
     "icon-transformer": "./bin.cjs",
@@ -18,11 +18,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/floatingdino/Icon-Transformer.git"
+    "url": "https://github.com/mamift/icon-transformer.git"
   },
-  "author": "Sam Haakman (floatingdino@gmail.com)",
+  "author": "Muhammad Miftah (mamift@gmail.com)",
   "license": "MIT",
-  "homepage": "https://github.com/floatingdino/Icon-Transformer",
+  "homepage": "https://github.com/mamift/icon-transformer",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "svgo": "^1.3.2",
