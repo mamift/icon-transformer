@@ -1,9 +1,7 @@
 import fs from "fs";
 
-import iconTransformer from "./dist/main.js";
+import * as iconTransformer from "./dist/main.js";
 import defaultConfig from "./icon-config.mjs";
-
-// console.log(iconTransformer, iconTransformer.default);
 
 const args = process.argv.slice(2);
 

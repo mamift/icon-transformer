@@ -1,8 +1,8 @@
 module.exports = {
 	mode: "production",
-	target: "async-node",
+	target: "node",
 	output: {
-		libraryTarget: "umd",
+		libraryTarget: "commonjs",
 		library: "iconTransformer",
 		libraryExport: "default"
 	}

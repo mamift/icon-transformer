@@ -10,7 +10,6 @@
   "engines": {
     "node": ">=10.12.0"
   },
-  "type": "module",
   "scripts": {
     "start": "node ./bin.cjs icon-config.json",
     "esm": "node ./bin.mjs icon-config.json",
