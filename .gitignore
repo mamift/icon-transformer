@@ -3,3 +3,4 @@ output/**
 input/**
 !input/example-user.svg
 dist
+stats.json
